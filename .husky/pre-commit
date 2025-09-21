@@ -10,7 +10,7 @@ STAGED_CS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep "\.cs$"
 if [ -n "$STAGED_CS_FILES" ]; then
     echo "Formateando archivos de C#"
 
-    dotnet format TiendaUCN.csproj --include $STAGED_CS_FILES --verbosity normal
+    dotnet format Tienda-UCN-api.csproj --include $STAGED_CS_FILES --verbosity normal
     FORMAT_EXIT_CODE=$?
 
     if [ $FORMAT_EXIT_CODE -eq 0 ]; then
