@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tienda_UCN_api.Domain.Models;
+using Tienda_UCN_api.src.Domain.Models;
 
 
 
-namespace Tienda_UCN_api.Infrastructure.Data
+namespace Tienda_UCN_api.src.Infrastructure.Data
 {
     /// <summary>
     /// Contexto de datos para la aplicación, hereda de IdentityDbContext para manejar la identidad de usuarios.

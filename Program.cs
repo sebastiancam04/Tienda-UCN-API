@@ -6,17 +6,25 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Resend;
 using Serilog;
-//using Tienda_UCN_api.Application.Services.Implements;
-using Tienda_UCN_api.Domain.Models;
 using Tienda_UCN_api.Infrastructure.Data;
-//using Tienda_UCN_api.src.Application.Mappers;
-//using Tienda_UCN_api.src.Infrastructure.Middlewares;
-//using Tienda_UCN_api.src.Infrastructure.Repositories.Implements;
-//using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
-//using Tienda_UCN_api.src.Application.Middlewares;
-//using Tienda_UCN_api.src.Application.Jobs;
+using Tienda_UCN_api.src.API.Middlewares;
+using Tienda_UCN_api.src.Application.Jobs;
+using Tienda_UCN_api.src.Application.Jobs.Implements;
+using Tienda_UCN_api.src.Application.Jobs.Interfaces;
+using Tienda_UCN_api.src.Application.Mappers;
+using Tienda_UCN_api.src.Application.Services;
+using Tienda_UCN_api.src.Application.Services.Implements;
+using Tienda_UCN_api.src.Application.Services.Implements;
+using Tienda_UCN_api.src.Application.Services.Interfaces;
 //using Tienda_UCN_api.src.Application.Jobs.Interfaces;
-//using Tienda_UCN_api.src.Application.Mappers;
+using Tienda_UCN_api.src.Application.Services.Interfaces;
+using Tienda_UCN_api.src.Domain.Models;
+using Tienda_UCN_api.src.Infrastructure.Data;
+using Tienda_UCN_api.src.Infrastructure.Middlewares;
+using Tienda_UCN_api.src.Infrastructure.Repositories.Implements;
+using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
+using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,25 +39,24 @@ builder.Services.AddEndpointsApiExplorer(); // Swagger endpoints
 builder.Services.AddSwaggerGen();           // Swagger UI
 
 //Mappers (comentados, podrías activarlos cuando crees los mappers)
-//builder.Services.AddScoped<ProductMapper>();
-//builder.Services.AddScoped<UserMapper>();
-//builder.Services.AddScoped<CartMapper>();
-//builder.Services.AddScoped<OrderMapper>();
-//
-//builder.Services.AddScoped<ITokenService, TokenService>();
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IEmailService, EmailService>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-//builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
-//builder.Services.AddScoped<IFileRepository, FileRepository>();
-//builder.Services.AddScoped<IFileService, FileService>();
-//builder.Services.AddScoped<IProductRepository, ProductRepository>();
-//builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<ICartRepository, CartRepository>();
-//builder.Services.AddScoped<ICartService, CartService>();
-//builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-//builder.Services.AddScoped<IOrderService, OrderService>();
-//builder.Services.AddScoped<IUserJob, UserJob>();
+builder.Services.AddScoped<ProductMapper>();
+builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<CartMapper>();
+builder.Services.AddScoped<OrderMapper>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IUserJob, UserJob>();
 
 #region Email Service Configuration
 Log.Information("Configurando servicio de Email");
@@ -206,8 +213,8 @@ app.UseSwaggerUI(c =>
 });
 
 // Middlewares personalizados (comentados por ahora)
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
-//app.UseMiddleware<CartMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<CartMiddleware>();
 
 app.MapOpenApi();               // Expone documentación OpenAPI
 app.UseCors("AllowAllOrigins"); // Habilita CORS

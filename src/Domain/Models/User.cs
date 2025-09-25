@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using Tienda_UCN_api.Domain.Models;
-// Add the following using if VerificationCode is in another namespace, e.g.:
-// <-- Change to actual namespace if needed
+using Tienda_UCN_api.src.Domain.Models;
 
-
-namespace Tienda_UCN_api.Domain.Models
+namespace Tienda_UCN_api.src.Domain.Models
 {
     public enum Gender
     {
@@ -45,7 +42,6 @@ namespace Tienda_UCN_api.Domain.Models
         /// Indica si el usuario ha aceptado los términos y condiciones.
         /// </summary>
         public ICollection<VerificationCode> VerificationCodes { get; set; } = new List<VerificationCode>();
-
 
         /// <summary>
         /// Órdenes realizadas por el usuario.

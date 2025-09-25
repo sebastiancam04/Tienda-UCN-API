@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Tienda_UCN_api.Domain.Models
+namespace Tienda_UCN_api.src.Domain.Models
 {
     public class Order
     {

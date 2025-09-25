@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Tienda_UCN_api.Domain.Models;
+using Tienda_UCN_api.src.Domain.Models;
+using Tienda_UCN_api.src.Infrastructure.Data;
 
 namespace Tienda_UCN_api.Infrastructure.Data
 {

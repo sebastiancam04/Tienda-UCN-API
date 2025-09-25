@@ -1,13 +1,11 @@
-
-/*
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-//using Tienda_UCN_api.Application.Services.Interfaces;
-using Tienda_UCN_api.Domain.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Tienda_UCN_api.src.Application.Services.Interfaces;
+using Tienda_UCN_api.src.Domain.Models;
 
-namespace Tienda_UCN_api.Application.Services.Implements
+namespace Tienda_UCN_api.src.Application.Services.Implements
 {
     /// <summary>
     /// Implementación del servicio de generación de tokens JWT.
@@ -69,5 +67,3 @@ namespace Tienda_UCN_api.Application.Services.Implements
         }
     }
 }
-
-*/
