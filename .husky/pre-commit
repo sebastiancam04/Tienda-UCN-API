@@ -1,0 +1,26 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+cd "$(dirname "$0")/.."
+
+
+# Verificar archivos C# en staging
+STAGED_CS_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep "\.cs$" || true)
+
+if [ -n "$STAGED_CS_FILES" ]; then
+    echo "Formateando archivos de C#"
+
+    dotnet format Tienda-UCN-api.csproj --include $STAGED_CS_FILES --verbosity normal
+    FORMAT_EXIT_CODE=$?
+
+    if [ $FORMAT_EXIT_CODE -eq 0 ]; then
+        git add $STAGED_CS_FILES
+        echo "Archivos formateados"
+    else
+        echo "Formato omitido"
+    fi
+else
+    echo "No hay archivos de C#"
+fi
+
+echo "Chequeo del pre-commit pasado"

@@ -6,6 +6,8 @@
 # dotenv files
 .env
 
+/logs
+
 # User-specific files
 *.rsuser
 *.suo
@@ -497,3 +499,4 @@ app.db-wal
 # AppSettings.json files
 
 appsettings.json
+

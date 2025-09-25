@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Verificación - Tienda UCN</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .welcome {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+        .code-container {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+        }
+        .code {
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .code-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .instructions {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+            font-size: 16px;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+            text-align: left;
+        }
+        .instructions li {
+            margin: 8px 0;
+            color: #555;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+        .warning strong {
+            color: #d63031;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 1px solid #e9ecef;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        .security-note {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .content {
+                padding: 30px 20px;
+            }
+            .code {
+                font-size: 28px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Tienda UCN</h1>
+            <p style="margin: 10px 0 0 0; opacity: 0.9;">Universidad Católica del Norte</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <div class="welcome">
+                ¡Hola! 👋<br>
+                Nos alegra que <strong>Tienda UCN</strong> sea parte de tu experiencia universitaria.
+            </div>
+
+            <!-- Verification Code -->
+            <div class="code-container">
+                <div class="code-label">Tu código de verificación es:</div>
+                <div class="code">{{CODE}}</div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions">
+                <h3>Instrucciones:</h3>
+                <ol>
+                    <li>Copia el código de verificación de arriba</li>
+                    <li>Regresa a la aplicación de Tienda UCN</li>
+                    <li>Pega el código en el campo correspondiente</li>
+                    <li>Haz click en "Verificar" para completar tu registro</li>
+                </ol>
+            </div>
+
+            <!-- Warning -->
+            <div class="warning">
+                <strong>Importante:</strong> Este código expirará pronto por motivos de seguridad.
+                Si no lo usas a tiempo, deberás solicitar uno nuevo.
+            </div>
+
+            <div class="security-note">
+                Por tu seguridad, nunca compartas este código con nadie.<br>
+                El equipo de Tienda UCN jamás te pedirá este código por teléfono o email.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <strong>Tienda UCN</strong> - Tu tienda universitaria de confianza<br>
+                Universidad Católica del Norte
+            </p>
+            <div style="margin-top: 15px; font-size: 12px; color: #999;">
+                Si no solicitaste este código, puedes ignorar este email de forma segura.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
