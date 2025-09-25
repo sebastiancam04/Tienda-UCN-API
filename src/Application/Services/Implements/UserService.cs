@@ -3,11 +3,9 @@ using Serilog;
 using Tienda_UCN_api.src.Application.DTO;
 using Tienda_UCN_api.src.Application.DTO.AuthDTO;
 using Tienda_UCN_api.src.Application.Services.Interfaces;
-using Tienda_UCN_api.src.Application.Services.Interfaces;
-using Tienda_UCN_api.src.Domain.Models;
 using Tienda_UCN_api.src.Domain.Models;
 using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
-using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
+
 
 namespace Tienda_UCN_api.src.Application.Services.Implements
 {
@@ -104,6 +102,7 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
                 throw new InvalidOperationException("El RUT ya está registrado.");
             }
             var user = registerDTO.Adapt<User>();
+            user.UserName = registerDTO.Email;
             var result = await _userRepository.CreateAsync(user, registerDTO.Password);
             if (!result)
             {

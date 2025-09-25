@@ -22,23 +22,26 @@ using Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===================== Database Connection =====================
+#region Database Connection
 var connectionString = builder.Configuration.GetConnectionString("SqliteDatabase")
     ?? throw new InvalidOperationException("Connection string SqliteDatabase no configurado");
+#endregion
 
-// ===================== Core Services =====================
+#region Core Services
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+#endregion
 
-// ===================== Mappers =====================
+#region Mappers
 builder.Services.AddScoped<ProductMapper>();
 builder.Services.AddScoped<UserMapper>();
 builder.Services.AddScoped<CartMapper>();
 builder.Services.AddScoped<OrderMapper>();
+#endregion
 
-// ===================== Services =====================
+#region Services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -46,19 +49,22 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+#endregion
 
-// ===================== Repositories =====================
+#region Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+#endregion
 
-// ===================== Jobs =====================
+#region Jobs
 builder.Services.AddScoped<IUserJob, UserJob>();
+#endregion
 
-// ===================== Email Service =====================
+#region Email Service
 Log.Information("Configurando servicio de Email");
 builder.Services.AddOptions();
 builder.Services.AddHttpClient<ResendClient>();
@@ -68,8 +74,9 @@ builder.Services.Configure<ResendClientOptions>(o =>
         ?? throw new InvalidOperationException("El token de API de Resend no está configurado.");
 });
 builder.Services.AddTransient<IResend, ResendClient>();
+#endregion
 
-// ===================== Authentication (JWT) =====================
+#region Authentication (JWT)
 Log.Information("Configurando autenticación JWT");
 builder.Services.AddAuthentication(options =>
 {
@@ -92,8 +99,9 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+#endregion
 
-// ===================== Identity =====================
+#region Identity
 Log.Information("Configurando Identity");
 builder.Services.AddIdentityCore<User>(options =>
 {
@@ -107,13 +115,15 @@ builder.Services.AddIdentityCore<User>(options =>
 .AddRoles<Role>()
 .AddEntityFrameworkStores<DataContext>()
 .AddDefaultTokenProviders();
+#endregion
 
-// ===================== Logging =====================
+#region Logging
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services));
+#endregion
 
-// ===================== CORS =====================
+#region CORS
 Log.Information("Configurando CORS");
 try
 {
@@ -136,13 +146,15 @@ catch (Exception ex)
     Log.Error(ex, "Error al configurar CORS");
     throw;
 }
+#endregion
 
-// ===================== Database (SQLite) =====================
+#region Database (SQLite)
 Log.Information("Configurando base de datos SQLite");
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("SqliteDatabase")));
+#endregion
 
-// ===================== Hangfire =====================
+#region Hangfire
 Log.Information("Configurando Hangfire");
 var cronExpression = builder.Configuration["Jobs:CronJobDeleteUnconfirmedUsers"]
     ?? throw new InvalidOperationException("La expresión cron para eliminar usuarios no confirmados no está configurada.");
@@ -160,11 +172,13 @@ builder.Services.AddHangfire(configuration =>
     configuration.UseRecommendedSerializerSettings();
 });
 builder.Services.AddHangfireServer();
+#endregion
 
-// ===================== Build App =====================
+#region Build App
 var app = builder.Build();
+#endregion
 
-// Hangfire Dashboard
+#region Hangfire Dashboard
 app.UseHangfireDashboard(builder.Configuration["HangfireDashboard:DashboardPath"]
     ?? throw new InvalidOperationException("La ruta de hangfire no ha sido declarada"), new DashboardOptions
     {
@@ -175,15 +189,17 @@ app.UseHangfireDashboard(builder.Configuration["HangfireDashboard:DashboardPath"
         DisplayStorageConnectionString = builder.Configuration.GetValue<bool?>("HangfireDashboard:DisplayStorageConnectionString")
         ?? throw new InvalidOperationException("La configuración 'HangfireDashboard:DisplayStorageConnectionString' no está definida."),
     });
+#endregion
 
-// ===================== Database Migration =====================
+#region Database Migration
 Log.Information("Aplicando migraciones a la base de datos");
 using (var scope = app.Services.CreateScope())
 {
     await DataSeeder.Initialize(scope.ServiceProvider);
 }
+#endregion
 
-// ===================== Middleware Pipeline =====================
+#region Middleware Pipeline
 Log.Information("Configurando el pipeline de la aplicación");
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -201,3 +217,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+#endregion
