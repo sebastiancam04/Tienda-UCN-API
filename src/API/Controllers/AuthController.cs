@@ -40,6 +40,16 @@ namespace Tienda_UCN_api.src.api.Controllers
         }
 
         /// <summary>
+        /// Registra un nuevo Admin.
+        /// </summary>
+        [HttpPost("registerAdmin")]
+        public async Task<IActionResult> RegisterAdminAsync([FromBody] RegisterDTO registerDTO)
+        {
+            var message = await _userService.RegisterAdminAsync(registerDTO, HttpContext);
+            return Ok(new GenericResponse<string>("Registro exitoso", message));
+        }
+
+        /// <summary>
         /// Verifica el correo electrónico del usuario.
         /// </summary>
         [HttpPost("verify-email")]

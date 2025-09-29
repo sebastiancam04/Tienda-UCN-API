@@ -58,6 +58,25 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
             await _resend.EmailSendAsync(message);
         }
 
+
+
+        public async Task SendWelcomeAdminAsync(string email)
+        {
+            var htmlBody = await LoadTemplate("WelcomeAdmin", null);
+
+            var message = new EmailMessage
+            {
+                To = email,
+                Subject = _configuration["EmailConfiguration:WelcomeAdminSubject"]
+                          ?? throw new ArgumentNullException("El asunto del correo de bienvenida no puede ser nulo."),
+                From = _configuration["EmailConfiguration:From"]
+                       ?? throw new ArgumentNullException("La configuración de 'From' no puede ser nula."),
+                HtmlBody = htmlBody
+            };
+
+            await _resend.EmailSendAsync(message);
+        }
+
         /// <summary>
         /// Envía un correo de recuperación de contraseña con código.
         /// </summary>

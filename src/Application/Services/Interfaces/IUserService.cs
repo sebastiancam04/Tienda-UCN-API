@@ -47,5 +47,7 @@ namespace Tienda_UCN_api.src.Application.Services.Interfaces
         Task<string> SendForgotPasswordCodeAsync(ForgotPasswordRequestDTO dto);
         Task<string> VerifyForgotPasswordCodeAsync(VerifyForgotPasswordCodeDTO dto);
 
+        Task<string> RegisterAdminAsync(RegisterDTO registerDTO, HttpContext httpContext);
+
     }
 }

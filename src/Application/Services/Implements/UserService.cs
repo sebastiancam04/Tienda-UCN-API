@@ -1,4 +1,5 @@
 using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Tienda_UCN_api.src.Application.DTO;
 using Tienda_UCN_api.src.Application.DTO.AuthDTO;
@@ -14,6 +15,7 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
     public class UserService : IUserService
     {
         private readonly ITokenService _tokenService;
+        private readonly UserManager<User> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
@@ -22,12 +24,14 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
 
         public UserService(
             ITokenService tokenService,
+            UserManager<User> userManager,
             IUserRepository userRepository,
             IEmailService emailService,
             IVerificationCodeRepository verificationCodeRepository,
             IConfiguration configuration)
         {
             _tokenService = tokenService;
+            _userManager = userManager;
             _userRepository = userRepository;
             _emailService = emailService;
             _verificationCodeRepository = verificationCodeRepository;
@@ -94,6 +98,56 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
             await _emailService.SendVerificationCodeEmailAsync(registerDTO.Email, code);
 
             return "Se ha enviado un código de verificación a su correo electrónico.";
+        }
+
+        // ---------------------------
+        // REGISTER ADMIN
+        // ---------------------------
+        public async Task<string> RegisterAdminAsync(RegisterDTO registerDTO, HttpContext httpContext)
+        {
+            Log.Information("Intentando registrar un nuevo administrador con email: {Email}", registerDTO.Email);
+
+            bool isRegistered = await _userRepository.ExistsByEmailAsync(registerDTO.Email);
+            if (isRegistered)
+                throw new InvalidOperationException("El administrador ya está registrado.");
+
+            isRegistered = await _userRepository.ExistsByRutAsync(registerDTO.Rut);
+            if (isRegistered)
+                throw new InvalidOperationException("El RUT ya está registrado.");
+
+            var user = registerDTO.Adapt<User>();
+            user.UserName = registerDTO.Email;
+
+            var result = await _userRepository.CreateAsync(user, registerDTO.Password);
+            if (!result)
+                throw new Exception("Error al registrar el administrador.");
+
+            // 🔹 Asignar el rol Admin
+            await _userManager.AddToRoleAsync(user, "Admin");
+
+            string code = new Random().Next(100000, 999999).ToString();
+            var verificationCode = new VerificationCode
+            {
+                UserId = user.Id,
+                Code = code,
+                CodeType = CodeType.EmailVerification,
+                ExpiryDate = DateTime.UtcNow.AddMinutes(_verificationCodeExpirationTimeInMinutes),
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _verificationCodeRepository.CreateAsync(verificationCode);
+
+            try
+            {
+                await _emailService.SendVerificationCodeEmailAsync(user.Email!, code);
+                Log.Information("Correo de bienvenida + verificación enviado exitosamente al administrador con email: {Email}", user.Email);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "No se pudo enviar el correo de verificación al administrador con email: {Email}", user.Email);
+            }
+
+            return "Administrador registrado exitosamente. Se ha enviado un código de verificación a su correo electrónico.";
         }
 
         // ---------------------------
@@ -168,14 +222,25 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
             if (!emailConfirmed)
                 throw new Exception("Error al confirmar el correo electrónico.");
 
-            await _verificationCodeRepository.DeleteByUserIdAsync(user.Id, CodeType.EmailVerification);
-            await _emailService.SendWelcomeEmailAsync(user.Email!);
+            var roles = await _userManager.GetRolesAsync(user);
 
-            return "!Ya puedes iniciar sesión y disfrutar de todos los beneficios de Tienda UCN!";
+            // 🔹 Solo un correo de bienvenida según el rol
+            if (roles.Contains("Admin"))
+            {
+                await _emailService.SendWelcomeAdminAsync(user.Email!);
+            }
+            else
+            {
+                await _emailService.SendWelcomeEmailAsync(user.Email!);
+            }
+
+            await _verificationCodeRepository.DeleteByUserIdAsync(user.Id, CodeType.EmailVerification);
+
+            return "¡Ya puedes iniciar sesión y disfrutar de todos los beneficios de Tienda UCN!";
         }
 
         // ---------------------------
-        // FORGOT PASSWORD (nuevo)
+        // FORGOT PASSWORD
         // ---------------------------
         public async Task<string> SendForgotPasswordCodeAsync(ForgotPasswordRequestDTO dto)
         {
@@ -224,7 +289,6 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
         // ---------------------------
         public Task<int> DeleteUnconfirmedAsync()
         {
-            // T
             throw new NotImplementedException();
         }
     }
