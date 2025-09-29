@@ -17,5 +17,8 @@ namespace Tienda_UCN_api.src.Application.Services.Interfaces
         /// </summary>
         /// <param name="email">El correo electrónico del usuario.</param>
         Task SendWelcomeEmailAsync(string email);
+        Task SendWelcomeAdminAsync(string email);
+        Task SendForgotPasswordEmailAsync(string email, string code);
+
     }
 }

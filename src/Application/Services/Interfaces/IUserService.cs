@@ -43,5 +43,11 @@ namespace Tienda_UCN_api.src.Application.Services.Interfaces
         /// </summary>
         /// <returns>Número de usuarios eliminados</returns>
         Task<int> DeleteUnconfirmedAsync();
+
+        Task<string> SendForgotPasswordCodeAsync(ForgotPasswordRequestDTO dto);
+        Task<string> VerifyForgotPasswordCodeAsync(VerifyForgotPasswordCodeDTO dto);
+
+        Task<string> RegisterAdminAsync(RegisterDTO registerDTO, HttpContext httpContext);
+
     }
 }

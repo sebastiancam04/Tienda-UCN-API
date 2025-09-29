@@ -75,6 +75,35 @@ namespace Tienda_UCN_api.src.Infrastructure.Repositories.Implements
             return true;
         }
 
+
+        public async Task<bool> CreateAdminAsync(User user, string password)
+        {
+            var userResult = await _userManager.CreateAsync(user, password);
+
+            if (!userResult.Succeeded)
+            {
+                foreach (var error in userResult.Errors)
+                {
+                    Log.Error($"Error al crear usuario {user.Email}: {error.Code} - {error.Description}");
+                }
+                return false;
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
+
+            if (!roleResult.Succeeded)
+            {
+                foreach (var error in roleResult.Errors)
+                {
+                    Log.Error($"Error al asignar rol al usuario {user.Email}: {error.Code} - {error.Description}");
+                }
+                return false;
+            }
+
+            Log.Information($"Usuario creado exitosamente: {user.Email} con rol Admin");
+            return true;
+        }
+
         /// <summary>
         /// Elimina un usuario por su ID.
         /// </summary>

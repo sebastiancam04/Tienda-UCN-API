@@ -85,5 +85,7 @@ namespace Tienda_UCN_api.src.Infrastructure.Repositories.Interfaces
         /// </summary>
         /// <returns>Número de usuarios eliminados</returns>
         Task<int> DeleteUnconfirmedAsync();
+
+        Task<bool> CreateAdminAsync(User user, string password);
     }
 }
