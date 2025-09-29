@@ -7,7 +7,7 @@ namespace Tienda_UCN_api.src.api.Controllers
 {
     /// <summary>
     /// Controlador de autenticación.
-    /// Maneja registro, login y verificación de correo.
+    /// Maneja registro, login, verificación de correo y recuperación de contraseña.
     /// </summary>
     [Route("api/[controller]")]
     public class AuthController : BaseController
@@ -57,6 +57,26 @@ namespace Tienda_UCN_api.src.api.Controllers
         {
             var message = await _userService.ResendEmailVerificationCodeAsync(resendEmailVerificationCodeDTO);
             return Ok(new GenericResponse<string>("Código de verificación reenviado exitosamente", message));
+        }
+
+        /// <summary>
+        /// Envía un código de verificación para Forgot Password al correo del usuario.
+        /// </summary>
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDTO dto)
+        {
+            var message = await _userService.SendForgotPasswordCodeAsync(dto);
+            return Ok(new GenericResponse<string>("Código enviado exitosamente", message));
+        }
+
+        /// <summary>
+        /// Verifica el código de Forgot Password enviado al correo.
+        /// </summary>
+        [HttpPost("verify-forgot-password-code")]
+        public async Task<IActionResult> VerifyForgotPasswordCode([FromBody] VerifyForgotPasswordCodeDTO dto)
+        {
+            var message = await _userService.VerifyForgotPasswordCodeAsync(dto);
+            return Ok(new GenericResponse<string>("Código verificado exitosamente, reestablezca la contraseña", message));
         }
     }
 }

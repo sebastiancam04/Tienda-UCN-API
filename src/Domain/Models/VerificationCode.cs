@@ -4,7 +4,8 @@ namespace Tienda_UCN_api.src.Domain.Models
     {
         EmailVerification,
         PasswordReset,
-        PasswordChange
+        PasswordChange,
+        ForgotPassword
     }
 
     public class VerificationCode
