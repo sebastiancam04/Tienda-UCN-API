@@ -118,6 +118,7 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
             var user = registerDTO.Adapt<User>();
             user.UserName = registerDTO.Email;
 
+
             var result = await _userRepository.CreateAsync(user, registerDTO.Password);
             if (!result)
                 throw new Exception("Error al registrar el administrador.");
@@ -267,6 +268,9 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
         public async Task<string> VerifyForgotPasswordCodeAsync(VerifyForgotPasswordCodeDTO dto)
         {
             User? user = await _userRepository.GetByEmailAsync(dto.Email);
+
+            Log.Information("NewPassword: {NewPassword}, ConfirmPassword: {ConfirmPassword}", dto.NewPassword, dto.ConfirmNewPassword);
+
             if (user == null)
                 throw new KeyNotFoundException("El usuario no existe.");
 
@@ -280,6 +284,14 @@ namespace Tienda_UCN_api.src.Application.Services.Implements
                 throw new ArgumentException("El código de recuperación es incorrecto o ha expirado.");
 
             await _verificationCodeRepository.DeleteByUserIdAsync(user.Id, CodeType.ForgotPassword);
+            if (dto.NewPassword.Trim() != dto.ConfirmNewPassword.Trim())
+                throw new ArgumentException("Las nuevas contraseñas no coinciden.");
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, dto.NewPassword);
+
+            if (!result.Succeeded)
+                throw new Exception("Error al restablecer la contraseña.");
 
             return "Código de recuperación verificado correctamente, puedes restablecer la contraseña.";
         }

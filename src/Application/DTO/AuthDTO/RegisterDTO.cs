@@ -74,5 +74,7 @@ namespace Tienda_UCN_api.src.Application.DTO.AuthDTO
         [Required(ErrorMessage = "El género es obligatorio.")]
         [RegularExpression(@"^(Masculino|Femenino|Otro)$", ErrorMessage = "El género debe ser Masculino, Femenino u Otro.")]
         public required string Gender { get; set; }
+
+
     }
 }
